@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.signup-card {
+  box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+}
+
+.signin-card {
+  box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+}
