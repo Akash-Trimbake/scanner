@@ -2,14 +2,15 @@ import React, { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
 // ...........................................................................
+
 import { Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import CheckList from "../Components/CheckList";
+// import CheckList from "../Components/CheckList";
 
 // ...........................................................................
 
-const Target = () => {
+const TargetBox = () => {
   let { url, setUrl, handleSubmitAddTarget } = useContext(AuthContext);
 
   return (
@@ -55,9 +56,8 @@ const Target = () => {
         </Button>
       </form>
       <br />
-      <CheckList />
     </div>
   );
 };
 
-export default Target;
+export default TargetBox;

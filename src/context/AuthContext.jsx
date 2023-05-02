@@ -1,7 +1,8 @@
 import { createContext, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+// import axiosInstance from "../axiosApi";
 
 const AuthContext = createContext();
 
@@ -19,9 +20,17 @@ export const AuthProvider = ({ children }) => {
       : null
   );
   // const [loading, setLoading] = useState(true);
+  const [ip, setIp] = useState("");
+  const [cms, setCms] = useState("");
+  const [programminglanguage, setProgramminglanguage] = useState("");
+  const [webserver, setWebserver] = useState("");
   const [url, setUrl] = useState("");
   const [subDomains, setSubDomains] = useState([]);
   const [selectedDomain, setSelectedDomain] = useState("");
+  const [dir, setDir] = useState([]);
+  const [endpoints, setEndpoints] = useState([]);
+  const [selectedEndpoint, setSelectedEndpoint] = useState("");
+
   // ...............................................................................
 
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -65,7 +74,7 @@ export const AuthProvider = ({ children }) => {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
-      navigate("/");
+      navigate("/target");
     } else {
       alert("Something went wrong");
     }
@@ -104,122 +113,179 @@ export const AuthProvider = ({ children }) => {
   // Context for Target
   // .....................................................................................................................
 
-  function sendUrlToBackend(url) {
-    // const authTokens = localStorage.getItem("authTokens");
-    const headers = { Authorization: `Bearer ${authTokens.access}` };
+  const sendUrlToBackend = async (url) => {
+    let headersList = {
+      Authorization: `Bearer ${authTokens.access}`,
+    };
 
-    const data = { url: url };
-
-    axios
-      .get(`http://192.168.0.110:8000/recon/1/sub?url=${url}`, data, {
+    let response = await fetch(
+      `http://192.168.0.110:8000/recon/1/sub?url=${url}`,
+      {
         method: "GET",
-        headers,
-      })
-      .then((response) => {
-        // Handle successful response
-        setSubDomains(response.data.subdomains);
+        headers: headersList,
+      }
+    );
 
-        // console.log(response.data.subdomains);
-      })
-      .catch((error) => {
-        // Handle error
-        alert(error);
-      });
-  }
+    let data = await response.json();
 
-  const selectSubdomain = (event) => {
-    setSelectedDomain(event.target.value);
+    setSubDomains(data.subdomains);
   };
 
   const handleSubmitAddTarget = (event) => {
     event.preventDefault();
     sendUrlToBackend(url);
-    setUrl("");
+    // setUrl("");
+  };
+
+  // .....................................................................................................................
+  // navigate to info page
+  // .....................................................................................................................
+  const navigateToInfoPage = () => {
+    navigate("/info");
   };
 
   // .....................................................................................................................
   // Context for Checklist and get techip response
   // .....................................................................................................................
-  // const selectedDomain = localStorage.getItem("selectedDomain");
 
-  async function sendSelectedSubdomainToBackend() {
-    const headers = { Authorization: `Bearer ${authTokens.access}` };
-    const data = { selectedDomain: selectedDomain };
+  const getTechIpFromBackend = async () => {
+    let headersList = {
+      Authorization: `Bearer ${authTokens.access}`,
+    };
 
-    axios
-      .get(
-        `http://192.168.0.110:8000/recon/1/techip?url=${selectedDomain}`,
-        data,
-        {
-          method: "GET",
-          headers,
-        }
-      )
-      .then((response) => {
-        // Handle successful response
-        console.log(response.data.ip);
-        // console.log(response.data.technology.webservers);
-        // console.log(response.data.technology.cms);
-        // console.log(response.data.technology.programminglanguages);
-      })
-      .catch((error) => {
-        // Handle error
-        alert("error fetching ip");
-      });
-  }
+    let response = await fetch(
+      `http://192.168.0.110:8000/recon/1/techip?url=${selectedDomain}`,
+      {
+        method: "GET",
+        headers: headersList,
+      }
+    );
+
+    let data = await response.json();
+    // console.log(data);
+    // console.log(data.subdomains.length);
+    // console.log(typeof data);
+    console.log("at techip", data);
+    console.log(data.ip);
+    console.log("technology", data.technology);
+
+    setIp(data.ip);
+    setCms(data.technology.cms);
+    setProgramminglanguage(data.technology.programminglanguage);
+    setWebserver(data.technology.webservers);
+    // webserver,programminglanguage,cms
+  };
+
   // .....................................................................................................................
   // get Directory response
   // .....................................................................................................................
+  const getDirFromBackend = async () => {
+    let headersList = {
+      Authorization: `Bearer ${authTokens.access}`,
+    };
 
-  async function getDirFromBackend() {
-    const headers = { Authorization: `Bearer ${authTokens.access}` };
-    const data = { selectedDomain: selectedDomain };
+    let response = await fetch(
+      `http://192.168.0.110:8000/recon/1/dir?url=${selectedDomain}&mode=1`,
+      {
+        method: "GET",
+        headers: headersList,
+      }
+    );
 
-    axios
-      .get(
-        `http://192.168.0.110:8000/recon/1/dir?url=${selectedDomain}&mode=1`,
-        data,
-        {
-          method: "GET",
-          headers,
-        }
-      )
-      .then((response) => {
-        // Handle successful response
-        console.log(response.data.directories);
-      })
-      .catch((error) => {
-        // Handle error
-        alert("error fetching dir");
-      });
-  }
+    let data = await response.json();
+    console.log("at dir", data);
+    setDir(data.directories);
+    // console.log(data.directories);
+  };
 
   // .....................................................................................................................
-  // get endpt response
+  // get endpoint response
   // .....................................................................................................................
 
-  async function getEndptFromBackend() {
-    const headers = { Authorization: `Bearer ${authTokens.access}` };
-    const data = { selectedDomain: selectedDomain };
+  const getEndptFromBackend = async () => {
+    let headersList = {
+      Authorization: `Bearer ${authTokens.access}`,
+    };
 
-    axios
-      .get(
-        `http://192.168.0.110:8000/recon/1/endpt?url=${selectedDomain}`,
-        data,
+    let response = await fetch(
+      `http://192.168.0.110:8000/recon/1/endpt?url=${selectedDomain}&count=100`,
+      {
+        method: "GET",
+        headers: headersList,
+      }
+    );
+
+    let data = await response.json();
+    console.log("at endpt", data);
+    // console.log(data.endpoints);
+    console.log(data.endpoints.length);
+    setEndpoints(data.endpoints);
+  };
+
+  // .....................................................................................................................
+  // get zap data
+  // .....................................................................................................................
+
+  const getZapSpyderResponse = async () => {
+    let headersList = {
+      Authorization: `Bearer ${authTokens.access}`,
+    };
+
+    let response = await fetch(
+      `http://192.168.0.110:8000/vuln/1/zap/spider?url=http://testphp.vulnweb.com/listproducts.php?cat=1`,
+      {
+        method: "GET",
+        headers: headersList,
+      }
+    );
+
+    let data = await response.json();
+    // console.log("zap spyder", data);
+
+    if (data) {
+      let headersList = {
+        Authorization: `Bearer ${authTokens.access}`,
+      };
+
+      let response = await fetch(
+        `http://192.168.0.110:8000/vuln/1/zap/active?url=http://testphp.vulnweb.com/listproducts.php?cat=1`,
         {
           method: "GET",
-          headers,
+          headers: headersList,
         }
-      )
-      .then((response) => {
-        // Handle successful response
-        console.log(response.data.endpoints);
-      })
-      .catch((error) => {
-        // Handle error
-        alert("error fetching endpt");
-      });
-  }
+      );
+
+      let data = await response.json();
+      console.log("zap active", data);
+    }
+  };
+
+  // const getZapActiveResponse = async () => {
+  //   let headersList = {
+  //     Authorization: `Bearer ${authTokens.access}`,
+  //   };
+
+  //   let response = await fetch(
+  //     `http://192.168.0.110:8000/vuln/1/zap/active?url=http://testphp.vulnweb.com/listproducts.php?cat=1`,
+  //     {
+  //       method: "GET",
+  //       headers: headersList,
+  //     }
+  //   );
+
+  //   let data = await response.json();
+  //   console.log("zap active", data);
+  // };
+
+  // .....................................................................................................................
+  // navigate to scanning page
+  // .....................................................................................................................
+  const navigateToScanningPage = () => {
+    navigate("/scanning");
+  };
+
+  // .....................................................................................................................
+  // get
   // .....................................................................................................................
 
   let contextData = {
@@ -233,21 +299,32 @@ export const AuthProvider = ({ children }) => {
     setUrl: setUrl,
     url: url,
     selectedDomain: selectedDomain,
-    sendSelectedSubdomainToBackend: sendSelectedSubdomainToBackend,
     subDomains: subDomains,
-    selectSubdomain: selectSubdomain,
     setSelectedDomain: setSelectedDomain,
+    navigateToInfoPage: navigateToInfoPage,
+    getTechIpFromBackend: getTechIpFromBackend,
     getDirFromBackend: getDirFromBackend,
     getEndptFromBackend: getEndptFromBackend,
+    getZapSpyderResponse: getZapSpyderResponse,
+    // getZapActiveResponse: getZapActiveResponse,
+    ip: ip,
+    webserver: webserver,
+    programminglanguage: programminglanguage,
+    cms: cms,
+    dir: dir,
+    endpoints: endpoints,
+    selectedEndpoint: selectedEndpoint,
+    setSelectedEndpoint: setSelectedEndpoint,
+    navigateToScanningPage: navigateToScanningPage,
   };
 
   useEffect(() => {
-    let tenMinute = 1000 * 60 * 10;
+    let twentyMinute = 1000 * 60 * 20;
     setInterval(() => {
       if (authTokens) {
         updateToken();
       }
-    }, tenMinute);
+    }, twentyMinute);
   }, [authTokens]);
 
   return (

@@ -1,11 +1,17 @@
 import React from "react";
-// import { ok } from "../Components/CheckList";
+import TechIp from "../Components/TechIp";
+import Dir from "../Components/Dir";
+import Endpoint from "../Components/Endpoint";
 
-const Info = (props) => {
+const Info = () => {
   return (
     <div>
-      <h1>Info</h1>
-      <p>{props.selectedSubDomainResponse}</p>
+      <TechIp />
+      <br />
+      <div style={{ display: "flex", gap: "20px" }}>
+        <Dir />
+        <Endpoint />
+      </div>
     </div>
   );
 };
