@@ -14,8 +14,6 @@ import PrivateRoutes from "./utils/PrivateRoute";
 import "./App.css";
 
 function App() {
-  // used the state lifting to share data between components
-
   return (
     <Router>
       <AuthProvider>
