@@ -94,9 +94,9 @@ const Endpoint = () => {
             fullWidth
             onClick={() => {
               navigateToScanningPage();
-              // getZapSpyderResponse();
+              getZapSpyderResponse();
               getNucleiResponse();
-              navigateToScanningPage();
+              // navigateToScanningPage();
               console.log("endpoint selected :", selectedEndpoint);
             }}
           >

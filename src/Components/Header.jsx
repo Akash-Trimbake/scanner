@@ -65,6 +65,7 @@ const Header = () => {
             onClick={() => {
               logoutUser();
               handleToggleAuth();
+              localStorage.clear();
             }}
           >
             <Link style={{ color: "white", textDecoration: "none" }}>

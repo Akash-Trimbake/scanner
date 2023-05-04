@@ -320,6 +320,71 @@ export const AuthProvider = ({ children }) => {
   //
   // .....................................................................................................................
 
+  const [dctVuln, setdctVuln] = useState([]);
+  const getNucleiResponse = () => {
+    // localStorage.setItem('data',[])
+    const url = `http://192.168.0.110:8000/vuln/1/nuclei?url=${selectedEndpoint}`;
+    const headers = { "Content-Type": "application/json" };
+
+    const responseData = document.getElementById("response-data");
+    let c = 1;
+    fetch(url, {
+      headers: {
+        ...headers,
+        Authorization: `Bearer ${authTokens.access}`,
+      },
+      method: "GET",
+    })
+      .then((response) => {
+        const reader = response.body.getReader();
+
+        function read() {
+          reader
+            .read()
+            .then(({ done, value }) => {
+              if (done) {
+                console.log("Stream complete");
+                return;
+              }
+
+              const decoder = new TextDecoder();
+              const text = decoder.decode(value);
+              // console.log(text, JSON.parse(`te/xt));
+              const items = JSON.parse(`${text}`);
+              // console.log(items);
+              // setResponse(json.data);
+              let dct = [items.data.Vuln, items.data.severity, items.data.url];
+              // console.log(dct);
+
+              localStorage.setItem(dct[0], dct);
+
+              let data = Object.keys(localStorage).filter((item) => {
+                return item !== "authTokens";
+              });
+              data = data.filter((item) => {
+                return item !== "isLoggedIn";
+              });
+              console.log(data.length);
+              setdctVuln(...[data]);
+              read();
+              c++;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+
+        read();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  // .....................................................................................................................
+  //
+  // .....................................................................................................................
+
   let contextData = {
     user: user,
     loginUser: loginUser,
@@ -348,8 +413,9 @@ export const AuthProvider = ({ children }) => {
     selectedEndpoint: selectedEndpoint,
     setSelectedEndpoint: setSelectedEndpoint,
     navigateToScanningPage: navigateToScanningPage,
-    // getNucleiResponse: getNucleiResponse,
+    getNucleiResponse: getNucleiResponse,
     responseData: responseData,
+    dctVuln: dctVuln,
   };
 
   useEffect(() => {
