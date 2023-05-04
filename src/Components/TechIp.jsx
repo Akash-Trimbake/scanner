@@ -5,20 +5,9 @@ import AuthContext from "../context/AuthContext";
 import { Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-function createData(infoOf, info) {
-  return { infoOf, info };
-}
-
-const rows = [
-  createData("Address", "Address"),
-  createData("IP", "ip"),
-  createData("Web Server", "webserver"),
-  createData("Programming Language", "programminglanguage"),
-  createData("CMS", "cms"),
-];
-
 const TechIp = () => {
-  let { ip, webserver, programminglanguage, cms } = useContext(AuthContext);
+  let { selectedDomain, ip, webserver, programminglanguage, cms } =
+    useContext(AuthContext);
 
   return (
     <>
@@ -27,7 +16,10 @@ const TechIp = () => {
           variant="h5"
           style={{ textAlign: "center", margin: "10px" }}
         >
-          Information of Target: Subdomain
+          Information of Target:{" "}
+          <span style={{ color: "rgba(0, 127, 255, 0.4)" }}>
+            {selectedDomain}
+          </span>
         </Typography>
         <Divider />
         <div
@@ -39,21 +31,21 @@ const TechIp = () => {
         >
           <div>
             <Typography>IP</Typography>
-            <Typography>{ip ? ip : <p>-</p>}</Typography>
+            <Typography>{ip ? ip : <span>0.0.0.0</span>}</Typography>
           </div>
           <div>
             <Typography>Web Server</Typography>
-            <Typography>{webserver ? webserver : <p>-</p>}</Typography>
+            <Typography>{webserver ? webserver : <span>-</span>}</Typography>
           </div>
           <div>
             <Typography>Programming Language</Typography>
             <Typography>
-              {programminglanguage ? programminglanguage : <p>-</p>}
+              {programminglanguage ? programminglanguage : <span>-</span>}
             </Typography>
           </div>
           <div>
             <Typography>CMS</Typography>
-            <Typography>{cms ? cms : <p>-</p>}</Typography>
+            <Typography>{cms ? cms : <span>-</span>}</Typography>
           </div>
         </div>
       </Paper>

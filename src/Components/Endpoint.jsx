@@ -24,8 +24,8 @@ const Endpoint = () => {
     selectedEndpoint,
     setSelectedEndpoint,
     getZapSpyderResponse,
-    // getZapActiveResponse,
     navigateToScanningPage,
+    getNucleiResponse,
   } = useContext(AuthContext);
 
   const handleChangePage = (event, newPage) => {
@@ -41,7 +41,7 @@ const Endpoint = () => {
     <Paper sx={{ width: "52vw", overflow: "hidden", padding: "10px" }}>
       {endpoints.length !== 0 ? (
         <FormControl>
-          <TableContainer sx={{ height: 510 }}>
+          <TableContainer sx={{ width: "52vw", height: 510 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -93,8 +93,9 @@ const Endpoint = () => {
             type="submit"
             fullWidth
             onClick={() => {
-              getZapSpyderResponse();
-              // getZapActiveResponse();
+              navigateToScanningPage();
+              // getZapSpyderResponse();
+              getNucleiResponse();
               navigateToScanningPage();
               console.log("endpoint selected :", selectedEndpoint);
             }}

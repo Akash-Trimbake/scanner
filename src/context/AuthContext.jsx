@@ -30,6 +30,8 @@ export const AuthProvider = ({ children }) => {
   const [dir, setDir] = useState([]);
   const [endpoints, setEndpoints] = useState([]);
   const [selectedEndpoint, setSelectedEndpoint] = useState("");
+  const [zap, setZap] = useState([]);
+  const [responseData, setResponseData] = useState("");
 
   // ...............................................................................
 
@@ -232,7 +234,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     let response = await fetch(
-      `http://192.168.0.110:8000/vuln/1/zap/spider?url=http://testphp.vulnweb.com/listproducts.php?cat=1`,
+      `http://192.168.0.110:8000/vuln/1/zap/spider?url=${selectedEndpoint}`,
       {
         method: "GET",
         headers: headersList,
@@ -248,7 +250,7 @@ export const AuthProvider = ({ children }) => {
       };
 
       let response = await fetch(
-        `http://192.168.0.110:8000/vuln/1/zap/active?url=http://testphp.vulnweb.com/listproducts.php?cat=1`,
+        `http://192.168.0.110:8000/vuln/1/zap/active?url=${selectedEndpoint}`,
         {
           method: "GET",
           headers: headersList,
@@ -257,25 +259,9 @@ export const AuthProvider = ({ children }) => {
 
       let data = await response.json();
       console.log("zap active", data);
+      setZap(data);
     }
   };
-
-  // const getZapActiveResponse = async () => {
-  //   let headersList = {
-  //     Authorization: `Bearer ${authTokens.access}`,
-  //   };
-
-  //   let response = await fetch(
-  //     `http://192.168.0.110:8000/vuln/1/zap/active?url=http://testphp.vulnweb.com/listproducts.php?cat=1`,
-  //     {
-  //       method: "GET",
-  //       headers: headersList,
-  //     }
-  //   );
-
-  //   let data = await response.json();
-  //   console.log("zap active", data);
-  // };
 
   // .....................................................................................................................
   // navigate to scanning page
@@ -285,7 +271,53 @@ export const AuthProvider = ({ children }) => {
   };
 
   // .....................................................................................................................
-  // get
+  // get nuclei response
+  // .....................................................................................................................
+
+  // const getNucleiResponse = () => {
+  //   const url =
+  //     "http://192.168.0.110:8000/vuln/1/nuclei?url=http://testphp.vulnweb.com/listproducts.php?cat=1";
+  //   const headers = { "Content-Type": "application/json" };
+
+  //   fetch(url, {
+  //     headers: {
+  //       ...headers,
+  //       Authorization: `Bearer ${authTokens.access}`,
+  //     },
+  //     method: "GET",
+  //   })
+  //     .then((response) => {
+  //       let reader = response.body.getReader();
+  //       const decoder = new TextDecoder();
+
+  //       function read() {
+  //         reader
+  //           .read()
+  //           .then(({ done, value }) => {
+  //             if (done) {
+  //               console.log("Stream complete");
+  //               return;
+  //             }
+
+  //             const decodedValue = decoder.decode(value);
+  //             JSON.parse(decodedValue);
+  //             setResponseData((prevData) => prevData + decodedValue);
+  //             read();
+  //           })
+  //           .catch((error) => {
+  //             console.error(error);
+  //           });
+  //       }
+
+  //       read();
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+  // .....................................................................................................................
+  //
   // .....................................................................................................................
 
   let contextData = {
@@ -306,7 +338,7 @@ export const AuthProvider = ({ children }) => {
     getDirFromBackend: getDirFromBackend,
     getEndptFromBackend: getEndptFromBackend,
     getZapSpyderResponse: getZapSpyderResponse,
-    // getZapActiveResponse: getZapActiveResponse,
+    zap: zap,
     ip: ip,
     webserver: webserver,
     programminglanguage: programminglanguage,
@@ -316,15 +348,17 @@ export const AuthProvider = ({ children }) => {
     selectedEndpoint: selectedEndpoint,
     setSelectedEndpoint: setSelectedEndpoint,
     navigateToScanningPage: navigateToScanningPage,
+    // getNucleiResponse: getNucleiResponse,
+    responseData: responseData,
   };
 
   useEffect(() => {
-    let twentyMinute = 1000 * 60 * 20;
+    let oneDay = 1000 * 60 * 60 * 24;
     setInterval(() => {
       if (authTokens) {
         updateToken();
       }
-    }, twentyMinute);
+    }, oneDay);
   }, [authTokens]);
 
   return (

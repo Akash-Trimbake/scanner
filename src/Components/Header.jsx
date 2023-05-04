@@ -58,14 +58,16 @@ const Header = () => {
         {/* <span> | </span> */}
         {/* <Divider orientation="vertical" dark /> */}
         {user ? (
-          <Button variant="contained" color="error" size="large">
-            <Link
-              onClick={() => {
-                logoutUser();
-                handleToggleAuth();
-              }}
-              style={{ color: "white", textDecoration: "none" }}
-            >
+          <Button
+            variant="contained"
+            color="error"
+            size="large"
+            onClick={() => {
+              logoutUser();
+              handleToggleAuth();
+            }}
+          >
+            <Link style={{ color: "white", textDecoration: "none" }}>
               LogOut
             </Link>
           </Button>
