@@ -21,7 +21,7 @@ const Header = () => {
           margin: "20px 40px",
         }}
       >
-        <Link
+        {/* <Link
           to="/"
           style={{
             marginTop: "12px",
@@ -35,7 +35,7 @@ const Header = () => {
           }}
         >
           Home
-        </Link>
+        </Link> */}
 
         {/* <span> | </span> */}
         <Divider orientation="vertical" />

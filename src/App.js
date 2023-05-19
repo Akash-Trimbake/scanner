@@ -8,6 +8,7 @@ import Header from "./Components/Header";
 import Info from "./mainPages/Info";
 import Scanning from "./mainPages/Scanning";
 import CheckList from "./Components/CheckList";
+import Dashboard from "./mainPages/Dashboard";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoutes from "./utils/PrivateRoute";
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/checklist" element={<CheckList />} />
             <Route path="/info" element={<Info />} />
             <Route path="/scanning" element={<Scanning />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/signup" element={<SignupPage />} />

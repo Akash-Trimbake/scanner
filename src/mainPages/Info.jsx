@@ -5,10 +5,10 @@ import Endpoint from "../Components/Endpoint";
 
 const Info = () => {
   return (
-    <div style={{ backgroundColor: "#f6f8fa" }}>
+    <div style={{ backgroundColor: "#f9fafe" }}>
       <TechIp />
       <br />
-      <div style={{ display: "flex", gap: "20px" }}>
+      <div style={{ display: "flex", gap: "20px", marginBottom: "3rem" }}>
         <Dir />
         <Endpoint />
       </div>

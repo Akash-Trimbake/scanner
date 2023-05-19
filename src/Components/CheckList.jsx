@@ -6,7 +6,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
+// import FormLabel from "@mui/material/FormLabel";
 import Divider from "@mui/material/Divider";
 
 // ............................................................................
@@ -18,6 +18,7 @@ const CheckList = () => {
     getTechIpFromBackend,
     getDirFromBackend,
     getEndptFromBackend,
+    getPortData,
     navigateToInfoPage,
   } = useContext(AuthContext);
 
@@ -25,8 +26,8 @@ const CheckList = () => {
   return (
     <div>
       {subDomains.length !== 0 ? (
-        <FormControl style={{ marginLeft: "5vw" }}>
-          <FormLabel id="demo-controlled-radio-buttons-group"></FormLabel>
+        <FormControl style={{ marginLeft: "2vw" }}>
+          {/* <FormLabel id="demo-controlled-radio-buttons-group"></FormLabel> */}
           <RadioGroup
             aria-labelledby="demo-controlled-radio-buttons-group"
             name="radio"
@@ -55,6 +56,7 @@ const CheckList = () => {
               getDirFromBackend();
               getEndptFromBackend();
               navigateToInfoPage();
+              getPortData();
             }}
           >
             Proceed

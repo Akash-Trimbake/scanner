@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
   const [selectedEndpoint, setSelectedEndpoint] = useState("");
   const [zap, setZap] = useState([]);
   const [responseData, setResponseData] = useState("");
+  const [dashboardData, setDashboardData] = useState([]);
 
   // ...............................................................................
 
@@ -179,6 +180,28 @@ export const AuthProvider = ({ children }) => {
   };
 
   // .....................................................................................................................
+  // get port response
+  // .....................................................................................................................
+
+  const getPortData = async () => {
+    let headersList = {
+      Authorization: `Bearer ${authTokens.access}`,
+    };
+
+    let response = await fetch(
+      `http://192.168.0.110:8000/recon/1/port?url=${selectedDomain}`,
+      {
+        method: "GET",
+        headers: headersList,
+      }
+    );
+
+    let data = await response.json();
+    setDashboardData(data);
+    console.log("at ports", data);
+  };
+
+  // .....................................................................................................................
   // get Directory response
   // .....................................................................................................................
   const getDirFromBackend = async () => {
@@ -251,6 +274,7 @@ export const AuthProvider = ({ children }) => {
 
       let response = await fetch(
         `http://192.168.0.110:8000/vuln/1/zap/active?url=${selectedEndpoint}`,
+        // `http://192.168.0.110:8000/vuln/1/zap/active?url=http://testphp.vulnweb.com/listproducts.php?cat=1`,
         {
           method: "GET",
           headers: headersList,
@@ -324,6 +348,7 @@ export const AuthProvider = ({ children }) => {
   const getNucleiResponse = () => {
     // localStorage.setItem('data',[])
     const url = `http://192.168.0.110:8000/vuln/1/nuclei?url=${selectedEndpoint}`;
+    // const url = `http://192.168.0.110:8000/vuln/1/nuclei?url=http://testphp.vulnweb.com/listproducts.php?cat=1`;
     const headers = { "Content-Type": "application/json" };
 
     const responseData = document.getElementById("response-data");
@@ -369,6 +394,7 @@ export const AuthProvider = ({ children }) => {
               read();
               c++;
             })
+
             .catch((error) => {
               console.error(error);
             });
@@ -382,8 +408,35 @@ export const AuthProvider = ({ children }) => {
   };
 
   // .....................................................................................................................
+  // get dashboard data
+  // .....................................................................................................................
+
+  const getDashboardData = async () => {
+    let headersList = {
+      Authorization: `Bearer ${authTokens.access}`,
+    };
+
+    let response = await fetch(
+      `http://192.168.0.110:8000/user/1/scandata?url=${selectedDomain}`,
+      // `http://192.168.0.110:8000/user/1/scandata?url=http://testphp.vulnweb.com`,
+      {
+        method: "GET",
+        headers: headersList,
+      }
+    );
+
+    let data = await response.json();
+    setDashboardData(data);
+    console.log("at dashboard", data);
+  };
+
+  // .....................................................................................................................
   //
   // .....................................................................................................................
+
+  const navigateToDashboard = () => {
+    navigate("/dashboard");
+  };
 
   let contextData = {
     user: user,
@@ -400,6 +453,7 @@ export const AuthProvider = ({ children }) => {
     setSelectedDomain: setSelectedDomain,
     navigateToInfoPage: navigateToInfoPage,
     getTechIpFromBackend: getTechIpFromBackend,
+    getPortData: getPortData,
     getDirFromBackend: getDirFromBackend,
     getEndptFromBackend: getEndptFromBackend,
     getZapSpyderResponse: getZapSpyderResponse,
@@ -416,6 +470,9 @@ export const AuthProvider = ({ children }) => {
     getNucleiResponse: getNucleiResponse,
     responseData: responseData,
     dctVuln: dctVuln,
+    getDashboardData: getDashboardData,
+    dashboardData: dashboardData,
+    navigateToDashboard: navigateToDashboard,
   };
 
   useEffect(() => {

@@ -45,7 +45,14 @@ const Endpoint = () => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell id="EndPoints" style={{ minWidth: "170" }}>
+                  <TableCell
+                    id="EndPoints"
+                    style={{
+                      minWidth: "170",
+                      fontSize: "1.4rem",
+                      color: "#4caf50",
+                    }}
+                  >
                     EndPoints
                   </TableCell>
                 </TableRow>
@@ -64,7 +71,11 @@ const Endpoint = () => {
                         <TableRow
                           hover
                           key={item}
-                          style={{ listStyle: "none" }}
+                          style={{
+                            listStyle: "none",
+                            marginLeft: "3rem",
+                            color: "grey",
+                          }}
                         >
                           <FormControlLabel
                             value={item}
@@ -96,7 +107,6 @@ const Endpoint = () => {
               navigateToScanningPage();
               getZapSpyderResponse();
               getNucleiResponse();
-              // navigateToScanningPage();
               console.log("endpoint selected :", selectedEndpoint);
             }}
           >

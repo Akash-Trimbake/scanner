@@ -13,7 +13,7 @@ const Target = () => {
   let { url, setUrl, handleSubmitAddTarget } = useContext(AuthContext);
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#f9fafe" }}>
       <form onSubmit={handleSubmitAddTarget}>
         <Typography
           variant="h5"

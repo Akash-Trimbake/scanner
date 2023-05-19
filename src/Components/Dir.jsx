@@ -42,7 +42,14 @@ export default function Dir() {
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    <TableCell id="Directories" style={{ width: "48vw" }}>
+                    <TableCell
+                      id="Directories"
+                      style={{
+                        width: "48vw",
+                        fontSize: "1.4rem",
+                        color: "#4caf50",
+                      }}
+                    >
                       Directories
                     </TableCell>
                   </TableRow>
@@ -61,7 +68,10 @@ export default function Dir() {
                             key={item}
                             style={{ listStyle: "none" }}
                           >
-                            <li key={item} style={{ margin: "10px" }}>
+                            <li
+                              key={item}
+                              style={{ margin: "10px", color: "grey" }}
+                            >
                               {item}
                             </li>
                           </TableRow>
