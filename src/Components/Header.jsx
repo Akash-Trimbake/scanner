@@ -7,21 +7,23 @@ import Button from "@mui/material/Button";
 const Header = () => {
   // const [notes, setNotes] = useState("");
 
-  let { user, logoutUser, handleToggleAuth } = useContext(AuthContext);
+  let { isLoggedIn, user, logoutUser, handleToggleAuth } =
+    useContext(AuthContext);
 
   //
 
   return (
-    <>
-      <nav
-        style={{
-          display: "flex",
-          justifyContent: "right",
-          gap: "10px",
-          margin: "20px 40px",
-        }}
-      >
-        {/* <Link
+    <div>
+      {isLoggedIn ? (
+        <nav
+          style={{
+            display: "flex",
+            justifyContent: "right",
+            gap: "10px",
+            margin: "20px 40px",
+          }}
+        >
+          {/* <Link
           to="/"
           style={{
             marginTop: "12px",
@@ -37,64 +39,57 @@ const Header = () => {
           Home
         </Link> */}
 
-        {/* <span> | </span> */}
-        <Divider orientation="vertical" />
-        <Link
-          to="/target"
-          color="secondary"
-          style={{
-            marginTop: "12px",
-            width: "100px",
-            height: "25px",
-            textAlign: "center",
-            color: "black",
-            // fontWeight: "bold",
-            textDecoration: "none",
-            lineHeight: "25px",
-          }}
-        >
-          Target
-        </Link>
-        {/* <span> | </span> */}
-        {/* <Divider orientation="vertical" dark /> */}
-        {user ? (
-          <Button
-            variant="contained"
-            color="error"
-            size="large"
-            onClick={() => {
-              logoutUser();
-              handleToggleAuth();
-              localStorage.clear();
+          {/* <span> | </span> */}
+          <Divider orientation="vertical" />
+          <Link
+            to="/target"
+            color="secondary"
+            style={{
+              marginTop: "12px",
+              width: "100px",
+              height: "25px",
+              textAlign: "center",
+              color: "black",
+              // fontWeight: "bold",
+              textDecoration: "none",
+              lineHeight: "25px",
             }}
           >
-            <Link style={{ color: "white", textDecoration: "none" }}>
-              LogOut
-            </Link>
-          </Button>
-        ) : (
-          <Button variant="contained" color="secondary" size="large">
-            <Link
-              to="/signin"
-              style={{ color: "white", textDecoration: "none" }}
+            Target
+          </Link>
+          {/* <span> | </span> */}
+          {/* <Divider orientation="vertical" dark /> */}
+          {user ? (
+            <Button
+              variant="contained"
+              color="error"
+              size="large"
+              onClick={() => {
+                logoutUser();
+                handleToggleAuth();
+                localStorage.clear();
+              }}
             >
-              Sign in
-            </Link>
-          </Button>
-        )}
-        {/* <Divider /> */}
-
-        {/* {user && <p>Hello {user.user_id}</p>} */}
-        {/* <button
-        onClick={() => {
-          console.log(username);
-        }}
-      >
-        click
-      </button> */}
-      </nav>
+              <Link style={{ color: "white", textDecoration: "none" }}>
+                LogOut
+              </Link>
+            </Button>
+          ) : (
+            <Button variant="contained" color="secondary" size="large">
+              <Link
+                to="/signin"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Sign in
+              </Link>
+            </Button>
+          )}
+        </nav>
+      ) : (
+        <></>
+      )}
       <Divider />
-    </>
+    </div>
   );
 };
 

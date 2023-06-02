@@ -26,7 +26,7 @@ const CheckList = () => {
   return (
     <div>
       {subDomains.length !== 0 ? (
-        <FormControl style={{ marginLeft: "2vw" }}>
+        <FormControl style={{ marginLeft: "2vw", textAlign: "left" }}>
           {/* <FormLabel id="demo-controlled-radio-buttons-group"></FormLabel> */}
           <RadioGroup
             aria-labelledby="demo-controlled-radio-buttons-group"
@@ -51,6 +51,7 @@ const CheckList = () => {
             variant="contained"
             color="primary"
             type="submit"
+            sx={{ width: "10vw", margin: "1vw 6vw" }}
             onClick={() => {
               getTechIpFromBackend();
               getDirFromBackend();

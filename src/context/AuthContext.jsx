@@ -210,6 +210,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     let response = await fetch(
+      // `http://192.168.0.110:8000/recon/1/dir?url=http://shaktiman.vulnweb.com&mode=1`,
       `http://192.168.0.110:8000/recon/1/dir?url=${selectedDomain}&mode=1`,
       {
         method: "GET",

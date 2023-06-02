@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import AuthContext from "../context/AuthContext";
 
@@ -11,6 +11,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import FormControl from "@mui/material/FormControl";
 import { Divider } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 
 let count = 0;
 
@@ -18,6 +19,17 @@ const Zap = () => {
   let { zap } = useContext(AuthContext);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [isTimeoutComplete, setIsTimeoutComplete] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsTimeoutComplete(true);
+    }, 7000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -54,18 +66,18 @@ const Zap = () => {
         backgroundColor: "#f9fafe",
       }}
     >
-      {zap.length !== 0 ? (
-        <FormControl>
-          <TableContainer sx={{ height: "85vh" }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  <TableCell id="zap" style={{ width: "48vw" }}>
-                    Zap Alerts
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
+      <FormControl>
+        <TableContainer sx={{ height: "85vh" }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell id="zap" style={{ width: "48vw" }}>
+                  Zap Alerts
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {zap.length !== 0 ? (
                 <ul>
                   {zap
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -74,7 +86,11 @@ const Zap = () => {
                         <Paper
                           key={count + 1}
                           elevation={1}
-                          sx={{ padding: "20px 50px", margin: "50px 10px" }}
+                          sx={{
+                            padding: "20px 50px",
+                            margin: "30px -30px",
+                            width: "33vw",
+                          }}
                         >
                           <p>
                             <span style={{ fontWeight: 500 }}>
@@ -102,29 +118,46 @@ const Zap = () => {
                             <span style={{ fontWeight: 500 }}>
                               Vulnerable url{" "}
                             </span>
-                            : {zap.vulnerable_url}
+                            : {zap.vulnerable_url.substring(0, 100)}
                           </p>
                         </Paper>
                       );
                     })}
                 </ul>
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Divider />
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
-            component="div"
-            count={zap.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </FormControl>
-      ) : (
-        <p>No Vulnerabilities found by Zap.</p>
-      )}
+              ) : (
+                <>
+                  {" "}
+                  <Skeleton
+                    width="80%"
+                    height={120}
+                    sx={{ marginLeft: "3rem", marginTop: "1rem" }}
+                  />
+                  <Skeleton
+                    width="80%"
+                    height={120}
+                    sx={{ marginLeft: "3rem", marginTop: "1rem" }}
+                  />
+                  <Skeleton
+                    width="80%"
+                    height={120}
+                    sx={{ marginLeft: "3rem", marginTop: "1rem" }}
+                  />
+                </>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Divider />
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={zap.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </FormControl>
     </Paper>
   );
 };

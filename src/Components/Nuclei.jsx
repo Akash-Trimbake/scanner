@@ -11,11 +11,23 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import FormControl from "@mui/material/FormControl";
 import { Divider } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 
 const Nuclei = () => {
   let { dctVuln, getNucleiResponse } = useContext(AuthContext);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [isTimeoutComplete, setIsTimeoutComplete] = useState(false);
+
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setIsTimeoutComplete(true);
+  //   }, 7000);
+
+  //   return () => {
+  //     clearTimeout(timeout);
+  //   };
+  // }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -61,19 +73,19 @@ const Nuclei = () => {
           backgroundColor: "#f9fafe",
         }}
       >
-        {dctVuln.length !== 0 ? (
-          <FormControl>
-            <TableContainer sx={{ height: "85vh" }}>
-              <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell id="nuclei" style={{ width: "48vw" }}>
-                      Nuclei Alerts
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <ul>
+        <FormControl>
+          <TableContainer sx={{ height: "85vh" }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell id="nuclei" style={{ width: "48vw" }}>
+                    Nuclei Alerts
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dctVuln.length !== 0 ? (
+                  <ul sx={{ marginLeft: "0px", padding: "0px" }}>
                     {dctVuln
                       .slice(
                         page * rowsPerPage,
@@ -84,9 +96,9 @@ const Nuclei = () => {
                           <Paper
                             elevation={1}
                             sx={{
-                              padding: "20px 50px",
-                              margin: "50px 10px",
-                              // width: "40vw",
+                              padding: "10px 50px",
+                              margin: "30px -20px",
+                              width: "80%",
                               // backgroundColor: "#F1F6F9",
                             }}
                           >
@@ -114,23 +126,40 @@ const Nuclei = () => {
                         );
                       })}
                   </ul>
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <Divider />
-            <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
-              component="div"
-              count={dctVuln.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </FormControl>
-        ) : (
-          <p>No Vulnerabilities found by Nuclei.</p>
-        )}
+                ) : (
+                  <>
+                    {" "}
+                    <Skeleton
+                      width="80%"
+                      height={120}
+                      sx={{ marginLeft: "3rem", marginTop: "1rem" }}
+                    />
+                    <Skeleton
+                      width="80%"
+                      height={120}
+                      sx={{ marginLeft: "3rem", marginTop: "1rem" }}
+                    />
+                    <Skeleton
+                      width="80%"
+                      height={120}
+                      sx={{ marginLeft: "3rem", marginTop: "1rem" }}
+                    />
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Divider />
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={dctVuln.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </FormControl>
       </Paper>
     </>
   );
